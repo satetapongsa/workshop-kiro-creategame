@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flappy Kiro</title>
+  <style>
+    /* ── Reset & layout ─────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Game wrapper — positions canvas and overlay button together ── */
+    #gameWrapper {
+      position: relative;
+      width: 480px;
+      height: 640px;
+    }
+
+    #gameCanvas {
+      display: block;
+      width: 480px;
+      height: 640px;
+      border: 3px solid #333;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* ── Restart button — absolutely centred over the canvas ────────── */
+    #restartBtn {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: 58%;
+      transform: translate(-50%, -50%);
+      padding: 12px 32px;
+      font-size: 18px;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      color: #fff;
+      background: #2a7a2a;
+      border: 3px solid #1a4a1a;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      box-shadow: 3px 3px 0 #1a4a1a;
+      transition: background 0.1s, box-shadow 0.1s, transform 0.1s;
+    }
+
+    #restartBtn:hover {
+      background: #3a9a3a;
+    }
+
+    #restartBtn:active {
+      background: #1a5a1a;
+      box-shadow: 1px 1px 0 #1a4a1a;
+      transform: translate(-50%, calc(-50% + 2px));
+    }
+  </style>
+</head>
+<body>
+  <div id="gameWrapper">
+    <canvas id="gameCanvas" width="480" height="640"></canvas>
+    <button id="restartBtn">Restart</button>
+  </div>
+
+  <script>
+    'use strict';
+
+    // ── Canvas setup ───────────────────────────────────────────────────
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // ── Compile-time constants ─────────────────────────────────────────
+    const CONFIG = {
+      GRAVITY:        0.4,              // px/frame² downward acceleration
+      FLAP_VELOCITY: -8,               // px/frame upward impulse on flap
+      MAX_FALL_SPEED: 12,              // px/frame terminal downward velocity
+      PIPE_SPEED:     3,               // px/frame leftward scroll
+      PIPE_INTERVAL: 200,              // px between consecutive pipe spawn positions
+      PIPE_WIDTH:    60,               // px
+      GAP_HEIGHT:   150,               // px vertical gap between top and bottom pipe
+      GAP_Y:        200,               // px from top to the top edge of the gap (fixed)
+      GHOST_WIDTH:   50,               // px
+      GHOST_HEIGHT:  50,               // px
+      HUD_HEIGHT:    40,               // px
+      CANVAS_WIDTH:  480,              // px
+      CANVAS_HEIGHT: 640,              // px
+      LS_KEY: 'flappyKiroHigh',        // localStorage key for high score
+      CLOUD_COUNT:   5,                // number of decorative clouds
+    };
+
+    // ── Score persistence ──────────────────────────────────────────────
+    function loadHighScore() {
+      try {
+        const stored = localStorage.getItem(CONFIG.LS_KEY);
+        state.highScore = stored ? parseInt(stored, 10) : 0;
+      } catch (_) {
+        state.highScore = 0;
+      }
+    }
+
+    function saveHighScore(score) {
+      try {
+        localStorage.setItem(CONFIG.LS_KEY, String(score));
+      } catch (_) {}
+    }
+
+    // ── Asset loading ──────────────────────────────────────────────────
+
+    // Ghost image
+    let ghostImgFailed = false;
+    const ghostImg = new Image();
+    ghostImg.onerror = () => { ghostImgFailed = true; };
+    ghostImg.src = 'assets/ghosty.png';
+
+    // Sound effects
+    const SFX = {
+      jump:     new Audio('assets/jump.wav'),
+      gameOver: new Audio('assets/game_over.wav'),
+    };
+
+    function playSound(key) {
+      try {
+        SFX[key].currentTime = 0;
+        SFX[key].play().catch(() => {});
+      } catch (_) {}
+    }
+
+    // ── Game state ─────────────────────────────────────────────────────
+    let state = {
+      mode:      'idle',   // 'idle' | 'playing' | 'game_over'
+      score:     0,
+      highScore: 0,        // loaded from localStorage on init
+
+      ghost: {
+        x:  80,            // fixed horizontal position
+        y:  260,           // vertical position (px from top)
+        vy: 0,             // vertical velocity (positive = downward)
+      },
+
+      pipes:  [],          // array of Pipe objects
+      pipeX:  CONFIG.CANVAS_WIDTH, // x position where next pipe spawns
+
+      clouds: [],          // array of Cloud objects (static, set on init)
+    };
+
+    // ── Cloud initialisation ───────────────────────────────────────────
+    function initClouds() {
+      state.clouds = [];
+      const positions = [
+        { x:  60, y:  80, rx: 40, ry: 20 },
+        { x: 180, y: 130, rx: 50, ry: 22 },
+        { x: 300, y:  60, rx: 45, ry: 18 },
+        { x: 400, y: 160, rx: 38, ry: 17 },
+        { x: 130, y: 200, rx: 42, ry: 19 },
+      ];
+      for (let i = 0; i < CONFIG.CLOUD_COUNT; i++) {
+        state.clouds.push({ ...positions[i] });
+      }
+    }
+
+    // ── Physics ────────────────────────────────────────────────────────
+    function applyPhysics() {
+      state.ghost.vy = Math.min(state.ghost.vy + CONFIG.GRAVITY, CONFIG.MAX_FALL_SPEED);
+      state.ghost.y += state.ghost.vy;
+    }
+
+    function flap() {
+      state.ghost.vy = CONFIG.FLAP_VELOCITY;
+      playSound('jump');
+    }
+
+    // ── Pipe system ────────────────────────────────────────────────────
+    function spawnPipe() {
+      state.pipes.push({ x: CONFIG.CANVAS_WIDTH, scored: false });
+      state.pipeX += CONFIG.PIPE_INTERVAL;
+    }
+
+    function updatePipes() {
+      // Scroll all existing pipes leftward
+      for (const pipe of state.pipes) {
+        pipe.x -= CONFIG.PIPE_SPEED;
+      }
+
+      // Decrement the next-spawn tracker; spawn when it reaches the canvas edge
+      state.pipeX -= CONFIG.PIPE_SPEED;
+      if (state.pipeX <= CONFIG.CANVAS_WIDTH) {
+        spawnPipe();
+      }
+
+      // Cull pipes that have fully scrolled off the left edge
+      state.pipes = state.pipes.filter(p => p.x + CONFIG.PIPE_WIDTH >= 0);
+    }
+
+    // ── Score system ──────────────────────────────────────────────────
+    function updateScore() {
+      for (const pipe of state.pipes) {
+        if (!pipe.scored && state.ghost.x > pipe.x + CONFIG.PIPE_WIDTH) {
+          pipe.scored = true;
+          state.score += 1;
+        }
+      }
+    }
+
+    // ── Game state transitions ─────────────────────────────────────────
+    function startGame() {
+      state.score  = 0;
+      state.mode   = 'playing';
+      state.pipes  = [];
+      state.pipeX  = CONFIG.CANVAS_WIDTH;
+
+      state.ghost.x  = 80;
+      state.ghost.y  = 260;
+      state.ghost.vy = 0;
+
+      document.getElementById('restartBtn').style.display = 'none';
+    }
+
+    function triggerGameOver() {
+      state.mode = 'game_over';
+      playSound('gameOver');
+
+      // Update high score if this run beat it
+      if (state.score > state.highScore) {
+        state.highScore = state.score;
+        saveHighScore(state.highScore);
+      }
+
+      // Show the restart button
+      document.getElementById('restartBtn').style.display = 'block';
+    }
+
+    // ── Collision system ───────────────────────────────────────────────
+    function rectsOverlap(a, b) {
+      return a.x < b.x + b.w &&
+             a.x + a.w > b.x &&
+             a.y < b.y + b.h &&
+             a.y + a.h > b.y;
+    }
+
+    function getGhostRect() {
+      return {
+        x: state.ghost.x + 4,
+        y: state.ghost.y + 4,
+        w: CONFIG.GHOST_WIDTH - 8,
+        h: CONFIG.GHOST_HEIGHT - 8,
+      };
+    }
+
+    function checkCollisions() {
+      const ghost = getGhostRect();
+
+      // Boundary checks
+      if (ghost.y < 0) {
+        triggerGameOver();
+        return;
+      }
+      if (ghost.y + ghost.h > CONFIG.CANVAS_HEIGHT - CONFIG.HUD_HEIGHT) {
+        triggerGameOver();
+        return;
+      }
+
+      // Pipe collision checks
+      for (const pipe of state.pipes) {
+        const topPipe = { x: pipe.x, y: 0, w: CONFIG.PIPE_WIDTH, h: CONFIG.GAP_Y };
+        const botPipe = {
+          x: pipe.x,
+          y: CONFIG.GAP_Y + CONFIG.GAP_HEIGHT,
+          w: CONFIG.PIPE_WIDTH,
+          h: CONFIG.CANVAS_HEIGHT - CONFIG.GAP_Y - CONFIG.GAP_HEIGHT - CONFIG.HUD_HEIGHT,
+        };
+        if (rectsOverlap(ghost, topPipe) || rectsOverlap(ghost, botPipe)) {
+          triggerGameOver();
+          return;
+        }
+      }
+    }
+
+    // ── Renderer ───────────────────────────────────────────────────────
+    function drawPipes() {
+      for (const pipe of state.pipes) {
+        const topH = CONFIG.GAP_Y;
+        const botY = CONFIG.GAP_Y + CONFIG.GAP_HEIGHT;
+        const botH = CONFIG.CANVAS_HEIGHT - CONFIG.GAP_Y - CONFIG.GAP_HEIGHT - CONFIG.HUD_HEIGHT;
+
+        // Green fill
+        ctx.fillStyle = '#4CAF50';
+        ctx.fillRect(pipe.x, 0, CONFIG.PIPE_WIDTH, topH);
+        ctx.fillRect(pipe.x, botY, CONFIG.PIPE_WIDTH, botH);
+
+        // Dark sketchy border
+        ctx.strokeStyle = '#1B5E20';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(pipe.x, 0, CONFIG.PIPE_WIDTH, topH);
+        ctx.strokeRect(pipe.x, botY, CONFIG.PIPE_WIDTH, botH);
+      }
+    }
+
+    function drawBackground() {
+      // Light blue sky fill
+      ctx.fillStyle = '#87CEEB';
+      ctx.fillRect(0, 0, CONFIG.CANVAS_WIDTH, CONFIG.CANVAS_HEIGHT);
+
+      // Sketchy hand-drawn accent lines (light, sparse)
+      ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+      ctx.lineWidth = 1;
+      // A few subtle wavy/diagonal lines for hand-drawn texture
+      ctx.beginPath();
+      ctx.moveTo(20, 40);  ctx.lineTo(60, 50);  ctx.lineTo(100, 38);
+      ctx.moveTo(150, 100); ctx.lineTo(200, 115); ctx.lineTo(240, 100);
+      ctx.moveTo(320, 70);  ctx.lineTo(360, 82);  ctx.lineTo(420, 68);
+      ctx.moveTo(30, 180);  ctx.lineTo(80, 190);  ctx.lineTo(130, 178);
+      ctx.moveTo(260, 240); ctx.lineTo(310, 252); ctx.lineTo(370, 238);
+      ctx.stroke();
+    }
+
+    function drawGhost() {
+      if (ghostImgFailed) {
+        // Fallback: white rectangle
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(state.ghost.x, state.ghost.y, CONFIG.GHOST_WIDTH, CONFIG.GHOST_HEIGHT);
+      } else {
+        ctx.drawImage(
+          ghostImg,
+          state.ghost.x,
+          state.ghost.y,
+          CONFIG.GHOST_WIDTH,
+          CONFIG.GHOST_HEIGHT
+        );
+      }
+    }
+
+    function drawHUD() {
+      const y = CONFIG.CANVAS_HEIGHT - CONFIG.HUD_HEIGHT;
+
+      // Dark HUD bar
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      ctx.fillRect(0, y, CONFIG.CANVAS_WIDTH, CONFIG.HUD_HEIGHT);
+
+      // Score text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 18px "Courier New", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(
+        `Score: ${state.score} | High: ${state.highScore}`,
+        CONFIG.CANVAS_WIDTH / 2,
+        y + CONFIG.HUD_HEIGHT / 2
+      );
+    }
+
+    function drawClouds() {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      for (const cloud of state.clouds) {
+        // Main ellipse
+        ctx.beginPath();
+        ctx.ellipse(cloud.x, cloud.y, cloud.rx, cloud.ry, 0, 0, Math.PI * 2);
+        ctx.fill();
+        // Smaller overlapping ellipse offset up-right for a fluffy cloud shape
+        ctx.beginPath();
+        ctx.ellipse(cloud.x + cloud.rx * 0.5, cloud.y - cloud.ry * 0.5, cloud.rx * 0.7, cloud.ry * 0.8, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function drawIdleOverlay() {
+      // Semi-transparent dark overlay
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+      ctx.fillRect(0, 0, CONFIG.CANVAS_WIDTH, CONFIG.CANVAS_HEIGHT);
+
+      // Game title
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px "Courier New", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Flappy Kiro', CONFIG.CANVAS_WIDTH / 2, CONFIG.CANVAS_HEIGHT / 2 - 50);
+
+      // Prompt text
+      ctx.font = '18px "Courier New", monospace';
+      ctx.fillText('Click or press Space to Start', CONFIG.CANVAS_WIDTH / 2, CONFIG.CANVAS_HEIGHT / 2 + 10);
+    }
+
+    function drawGameOverOverlay() {
+      // Semi-transparent dark overlay
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+      ctx.fillRect(0, 0, CONFIG.CANVAS_WIDTH, CONFIG.CANVAS_HEIGHT);
+
+      // Game Over title
+      ctx.fillStyle = '#ff4444';
+      ctx.font = 'bold 40px "Courier New", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Game Over', CONFIG.CANVAS_WIDTH / 2, CONFIG.CANVAS_HEIGHT / 2 - 80);
+
+      // Final score
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 22px "Courier New", monospace';
+      ctx.fillText(`Score: ${state.score}`, CONFIG.CANVAS_WIDTH / 2, CONFIG.CANVAS_HEIGHT / 2 - 30);
+
+      // High score
+      ctx.fillText(`Best: ${state.highScore}`, CONFIG.CANVAS_WIDTH / 2, CONFIG.CANVAS_HEIGHT / 2 + 10);
+    }
+
+    // ── Game loop ──────────────────────────────────────────────────────
+    function update() {
+      if (state.mode !== 'playing') return;
+      applyPhysics();
+      updatePipes();
+      updateScore();
+      checkCollisions();
+    }
+
+    // ── Main render function ───────────────────────────────────────────
+    function render() {
+      ctx.clearRect(0, 0, CONFIG.CANVAS_WIDTH, CONFIG.CANVAS_HEIGHT);
+      drawBackground();
+      drawClouds();
+      drawPipes();
+      drawGhost();
+      drawHUD();
+      if (state.mode === 'idle') {
+        drawIdleOverlay();
+      } else if (state.mode === 'game_over') {
+        drawGameOverOverlay();
+      }
+    }
+
+    // ── Game loop (rAF) ────────────────────────────────────────────────
+    function loop(timestamp) {
+      update();
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    // ── Input handling ────────────────────────────────────────────────
+    function handleInput() {
+      if (state.mode === 'idle') {
+        startGame();
+      } else if (state.mode === 'playing') {
+        flap();
+      }
+      // game_over mode: handled only by the restart button's own click listener
+    }
+
+    canvas.addEventListener('click', handleInput);
+    window.addEventListener('keydown', function(e) {
+      if (e.code === 'Space') {
+        e.preventDefault(); // prevent page scroll
+        handleInput();
+      }
+    });
+
+    // ── Input handlers ────────────────────────────────────────────────
+    document.getElementById('restartBtn').addEventListener('click', startGame);
+
+    // ── Bootstrap ─────────────────────────────────────────────────────
+    requestAnimationFrame(loop);
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,644 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Scaffold the HTML file and define all constants": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668268455
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668282337
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668348567
+      }
+    ],
+    "2.1 Load `ghosty.png` image asset with an `onerror` fallback flag, and load `jump.wav` and `game_over.wav` into the `SFX` object": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668268723
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668353927
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668416621
+      }
+    ],
+    "2.2 Implement `loadHighScore()` and `saveHighScore(score)` using `localStorage` with a `try/catch` guard": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668268934
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668359207
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668420967
+      }
+    ],
+    "2.3 Initialize the `state` object (`mode`, `score`, `highScore`, `ghost`, `pipes`, `pipeX`, `clouds`) and the `initClouds()` helper that populates static cloud positions": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668269134
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668363943
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668426461
+      }
+    ],
+    "3.1 Write `applyPhysics()` that applies `GRAVITY` to `ghost.vy`, clamps to `MAX_FALL_SPEED`, and integrates `ghost.vy` into `ghost.y`": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668269275
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668436464
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668925616
+      }
+    ],
+    "3.4 Write `flap()` that sets `ghost.vy = CONFIG.FLAP_VELOCITY` and calls `playSound('jump')`": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668269359
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669373926
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669470166
+      }
+    ],
+    "4.1 Write `spawnPipe()` that pushes a new pipe object `{ x: CANVAS_WIDTH, scored: false }` onto `state.pipes` and advances `state.pipeX` by `PIPE_INTERVAL`": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668269475
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668441216
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668931453
+      }
+    ],
+    "4.2 Write `updatePipes()` that decrements each pipe's `x` by `PIPE_SPEED`, spawns when `state.pipeX` drops to the canvas edge, and culls pipes where `x + PIPE_WIDTH < 0`": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668269575
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669380968
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669476783
+      }
+    ],
+    "5.1 Write `updateScore()` that iterates `state.pipes`, marks pipes as `scored` when the ghost's x passes the pipe's right edge, and increments `state.score`": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668269680
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669385928
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669483411
+      }
+    ],
+    "6.1 Write `rectsOverlap(a, b)` AABB helper and `getGhostRect()` that returns the ghost bounding box with a 4 px inset": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668269761
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669392041
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669490139
+      }
+    ],
+    "6.2 Write `checkCollisions()` that tests the ghost rect against each pipe's top and bottom rects and against the top/bottom canvas boundaries; on any hit, calls `triggerGameOver()`": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668269844
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669980736
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670041470
+      }
+    ],
+    "6.3 Write `triggerGameOver()` that sets `state.mode = 'game_over'`, calls `playSound('gameOver')`, compares and saves the high score via `saveHighScore`, and shows the restart button": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668269927
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670062666
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670121101
+      }
+    ],
+    "7. Checkpoint — Ensure core game loop logic is correct": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668270042
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670483016
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670543891
+      }
+    ],
+    "8.1 Write `startGame()` that resets `state` (score, ghost position, pipes array, pipeX), sets `state.mode = 'playing'`, and hides the restart button": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668270197
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669985637
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670047710
+      }
+    ],
+    "8.3 Implement the main `update()` function that chains `applyPhysics()`, `updatePipes()`, `updateScore()`, and `checkCollisions()` — only runs when `state.mode === 'playing'`": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668270375
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669990738
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670053979
+      }
+    ],
+    "8.4 Implement the `loop(timestamp)` function using `requestAnimationFrame`, calling `update()` when playing and `render()` every frame; kick off the loop with the initial `requestAnimationFrame(loop)` call": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668270574
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670068813
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670127228
+      }
+    ],
+    "9.1 Write `drawBackground()` that fills the canvas with light blue and adds a few light cross-hatch or wavy sketch lines for the hand-drawn feel": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668270709
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668446368
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668937788
+      }
+    ],
+    "9.2 Write `drawClouds()` that renders each cloud object as overlapping white ellipses using `ctx.ellipse` or bezier curves": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668270828
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668451191
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668942135
+      }
+    ],
+    "9.3 Write `drawPipes()` that renders top and bottom green filled rects for each pipe with a dark stroke for the sketchy border effect": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668271109
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668455352
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668946872
+      }
+    ],
+    "9.4 Write `drawGhost()` that draws `ghostImg` centered on the ghost position; falls back to a white filled rect if the image failed to load": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668271580
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668952261
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669010309
+      }
+    ],
+    "9.5 Write `drawHUD()` that fills a dark rect at the bottom of the canvas and renders `\"Score: X | High: X\"` in white text": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668271706
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668957695
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669015858
+      }
+    ],
+    "9.7 Write `drawIdleOverlay()` that renders a semi-transparent overlay with \"Click or press Space to Start\" prompt over the canvas": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668271855
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669397289
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669495360
+      }
+    ],
+    "9.8 Write `drawGameOverOverlay()` that renders a semi-transparent overlay with the final score, high score, and the visible restart button positioned over the canvas": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668271980
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669501108
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669886360
+      }
+    ],
+    "9.9 Write the main `render()` function that clears the canvas, then calls the layer draws in order: background → clouds → pipes → ghost → HUD → overlay (if idle or game_over)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668272140
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669506904
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669892679
+      }
+    ],
+    "10.1 Attach `canvas.addEventListener('click', handleInput)` and `window.addEventListener('keydown', ...)` for spacebar, implementing `handleInput()` to call `startGame()` from idle or `flap()` during play": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668272571
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670550151
+      }
+    ],
+    "10.2 Attach the `restartBtn` click listener to call `startGame()`; confirm the button is positioned absolutely over the canvas center and styled to match the retro theme": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668272696
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670559936
+      }
+    ],
+    "10.3 Call `loadHighScore()` and `initClouds()` on page load, then start the `requestAnimationFrame` loop in `'idle'` mode — verifying the full pipeline works end-to-end": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668272879
+      }
+    ],
+    "11. Final checkpoint — Ensure all tests pass": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668273011
+      }
+    ],
+    "2. Implement asset loading and the initial game state": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790668426571
+      }
+    ],
+    "2.4 Write property test for high score persistence (Property 12)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669362589
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669367983
+      }
+    ],
+    "3. Implement the physics and flap system": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669470583
+      }
+    ],
+    "4. Implement the pipe system": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669476968
+      }
+    ],
+    "5. Implement scoring": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669483622
+      }
+    ],
+    "9. Implement the renderer": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669893045
+      }
+    ],
+    "3.2 Write property test for gravity accumulation (Property 1)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669904877
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669910263
+      }
+    ],
+    "3.3 Write property test for position integration (Property 2)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669915730
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669920527
+      }
+    ],
+    "4.3 Write property test for pipe spacing invariant (Property 3)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669924754
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669929378
+      }
+    ],
+    "4.4 Write property test for pipe movement and culling (Property 4)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669934944
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669940513
+      }
+    ],
+    "4.5 Write property test for gap geometry consistency (Property 5)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669946359
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669952021
+      }
+    ],
+    "5.2 Write property test for score increments exactly once per pipe (Property 6)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669958430
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669963803
+      }
+    ],
+    "9.6 Write property test for HUD text reflects current values (Property 11)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669969636
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790669974553
+      }
+    ],
+    "6. Implement collision detection and game over transition": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670121182
+      }
+    ],
+    "8. Implement the game loop and state transitions": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670127388
+      }
+    ],
+    "6.4 Write property test for collision triggering game over (Property 8)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670134394
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670139698
+      }
+    ],
+    "6.5 Write property test for game over freezing positions (Property 9)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670146218
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670454263
+      }
+    ],
+    "6.6 Write property test for high score is running maximum (Property 7)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670460778
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670466826
+      }
+    ],
+    "8.2 Write property test for restart producing a clean state (Property 10)": [
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670471751
+      },
+      {
+        "executionId": "eb4b57b2-8015-4145-9ced-6feca94569e4",
+        "chatSessionId": "sess_c8d5ae7e-dbfd-439b-bff2-6bb3d47fcde9",
+        "timestamp": 1790670476617
+      }
+    ]
+  }
+}
